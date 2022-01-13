@@ -1,21 +1,29 @@
 import React from 'react';
+import { useFetchGifs } from '../hooks/useFetchGifs';
+import { GifgridItem } from './gifGridItem';
 
 export const GifGrid = ({category}) => {
 
-    const getGifs = () => {
-        const url = "https://api.giphy.com/v1/gifs/search?api_key=S3NRyo2KOVGVmgbFf9cgabliVaQZ7SUo&q=Rick+and+Morty";
-        // const resp = await fetch(url);
-        // const data = await resp.json();
-
-        // console.log(data)
-    };
-
-    getGifs();
+    const {data:images, loading} = useFetchGifs(category);
 
     return (
-        <div>
+        <>
             <h3>{category}</h3>
-        </div>
+
+            {loading ? <p className='animate__animated animate__flash'>Cargando ...</p>: null}
+
+            <div className='card-grid'>
+                {
+                    images.map(img => (
+                        <GifgridItem
+                            key={img.id} 
+                            {...img}
+                        />
+                    ))
+                }
+            </div>        
+        </>
+
     )
 }
 
